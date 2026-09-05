@@ -12,7 +12,7 @@ if "assets" not in st.session_state:
 
 
 def _col(df: pd.DataFrame, names: list[str]) -> str | None:
-    lower = {c.lower().strip(): c for c in df.columns}
+    lower = {str(c).lower().strip(): c for c in df.columns}
     for name in names:
         if name.lower() in lower:
             return lower[name.lower()]
@@ -21,6 +21,11 @@ def _col(df: pd.DataFrame, names: list[str]) -> str | None:
 
 def _num(series: pd.Series) -> float:
     return float(pd.to_numeric(series, errors="coerce").fillna(0).sum())
+
+
+def _truthy(series: pd.Series) -> pd.Series:
+    text = series.astype(str).str.strip().str.lower()
+    return text.isin({"true", "1", "yes", "y", "t"})
 
 
 def kpis(df: pd.DataFrame) -> dict[str, float | int]:
@@ -37,52 +42,45 @@ def kpis(df: pd.DataFrame) -> dict[str, float | int]:
         return empty
 
     pkg_col = _col(df, ["packages", "package_count", "pkg_count", "parcel_count"])
-    cycle_col = _col(df, ["cycle", "cycle_name", "sort_cycle", "wave"])
+    cycle_col = _col(df, ["cycle", "sort_cycle", "cycle_name", "wave"])
     same_day_col = _col(df, ["same_day", "is_same_day", "sameday"])
-    conveyor_col = _col(df, ["conveyor", "is_conveyor", "non_conveyor", "induct_type"])
-    truck_col = _col(df, ["trucks", "truck_count", "trailer_count", "truck_id"])
-    week_col = _col(df, ["week", "week_of", "service_week"])
+    conveyor_col = _col(df, ["induct_type", "non_conveyor", "conveyor", "is_conveyor"])
+    truck_col = _col(df, ["truck_id", "trucks", "truck_count", "trailer_count"])
     volume_col = _col(df, ["volume", "total_volume", "cube", "cuft", "volume_m3"])
-    route_col = _col(df, ["route", "route_id", "delivery_route", "routes"])
-    dsp_col = _col(df, ["dsp", "provider", "delivery_service_provider", "carrier"])
-    tote_col = _col(df, ["totes", "tote_count", "tote_id"])
+    route_col = _col(df, ["route_id", "route", "delivery_route", "routes"])
+    dsp_col = _col(df, ["dsp", "delivery_service_provider", "provider", "carrier"])
+    tote_col = _col(df, ["tote_id", "totes", "tote_count"])
 
     out = dict(empty)
 
+    def pkg_sum(mask: pd.Series) -> int:
+        if pkg_col:
+            return int(_num(df.loc[mask, pkg_col]))
+        return int(mask.sum())
+
     if cycle_col is not None:
-        cycle = df[cycle_col].astype(str).str.lower()
-        mask = cycle.str.contains(r"\bcycle\s*1\b|^1$|c1", regex=True)
-        out["cycle_1_packages"] = int(_num(df.loc[mask, pkg_col])) if pkg_col else int(mask.sum())
+        cycle = df[cycle_col].astype(str).str.strip().str.lower()
+        mask = cycle.isin({"1", "1.0", "c1", "cycle 1", "cycle1"})
+        out["cycle_1_packages"] = pkg_sum(mask)
 
     if same_day_col is not None:
-        raw = df[same_day_col]
-        if raw.dtype == bool or set(raw.dropna().astype(str).str.lower().unique()) <= {"true", "false", "1", "0", "yes", "no", "y", "n"}:
-            flag = raw.astype(str).str.lower().isin({"true", "1", "yes", "y"})
-            out["same_day_packages"] = int(_num(df.loc[flag, pkg_col])) if pkg_col else int(flag.sum())
-        else:
-            flag = raw.astype(str).str.lower().str.contains("same")
-            out["same_day_packages"] = int(_num(df.loc[flag, pkg_col])) if pkg_col else int(flag.sum())
+        flag = _truthy(df[same_day_col]) | df[same_day_col].astype(str).str.lower().str.contains("same", na=False)
+        out["same_day_packages"] = pkg_sum(flag)
     elif cycle_col is not None:
-        flag = df[cycle_col].astype(str).str.lower().str.contains("same")
-        out["same_day_packages"] = int(_num(df.loc[flag, pkg_col])) if pkg_col else int(flag.sum())
+        flag = df[cycle_col].astype(str).str.lower().str.contains("same", na=False)
+        out["same_day_packages"] = pkg_sum(flag)
 
     if conveyor_col is not None:
-        text = df[conveyor_col].astype(str).str.lower()
-        if "non_conveyor" in conveyor_col.lower() or text.str.contains("non").any():
-            flag = text.str.contains("non") | text.isin({"1", "true", "yes"})
-            if conveyor_col.lower() in {"conveyor", "is_conveyor"}:
-                flag = text.isin({"0", "false", "no", "n", "non", "non-conveyor", "non_conveyor", "manual"})
-            out["non_conveyor_packages"] = int(_num(df.loc[flag, pkg_col])) if pkg_col else int(flag.sum())
+        text = df[conveyor_col].astype(str).str.strip().str.lower()
+        if conveyor_col.lower() in {"conveyor", "is_conveyor"}:
+            flag = ~_truthy(df[conveyor_col]) | text.isin({"false", "0", "no", "n", "manual", "non", "non_conveyor", "non-conveyor"})
         else:
-            flag = text.isin({"0", "false", "no", "n", "manual", "off-conveyor", "off_conveyor"})
-            out["non_conveyor_packages"] = int(_num(df.loc[flag, pkg_col])) if pkg_col else int(flag.sum())
+            flag = text.str.contains("non", na=False) | text.isin({"manual", "off", "off_conveyor"})
+        out["non_conveyor_packages"] = pkg_sum(flag)
 
     if truck_col is not None:
-        if truck_col.lower() in {"truck_id"}:
-            work = df
-            if week_col is not None:
-                work = df  # current file is treated as this week
-            out["trucks_this_week"] = int(work[truck_col].nunique(dropna=True))
+        if truck_col.lower().endswith("_id") or truck_col.lower() == "truck_id":
+            out["trucks_this_week"] = int(df[truck_col].dropna().astype(str).nunique())
         else:
             out["trucks_this_week"] = int(_num(df[truck_col]))
 
@@ -91,13 +89,15 @@ def kpis(df: pd.DataFrame) -> dict[str, float | int]:
 
     if route_col is not None:
         if dsp_col is not None:
-            out["routes_by_dsp"] = int(df.dropna(subset=[route_col]).groupby(dsp_col)[route_col].nunique().sum())
+            out["routes_by_dsp"] = int(
+                df.dropna(subset=[route_col]).groupby(df[dsp_col].astype(str))[route_col].nunique().sum()
+            )
         else:
             out["routes_by_dsp"] = int(df[route_col].nunique(dropna=True))
 
     if tote_col is not None:
         if tote_col.lower() in {"tote_id"}:
-            out["totes"] = int(df[tote_col].nunique(dropna=True))
+            out["totes"] = int(df[tote_col].dropna().astype(str).nunique())
         else:
             out["totes"] = int(_num(df[tote_col]))
 
@@ -110,7 +110,10 @@ metrics = kpis(df)
 st.markdown(
     """
     <style>
-      .block-container {padding-top: 1.4rem;}
+      [data-testid="stHeader"] {background: transparent;}
+      .block-container {padding-top: 1rem;}
+      h1.dispatch-title {font-size: 1.6rem; margin: 0 0 .25rem 0;}
+      p.dispatch-sub {color: #5b675e; margin: 0 0 1rem 0;}
       div[data-testid="stMetric"] {
         background: #e8efe8;
         border: 1px solid #c5d4c7;
@@ -118,6 +121,8 @@ st.markdown(
         padding: 12px 16px;
       }
     </style>
+    <h1 class="dispatch-title">Rural dispatch</h1>
+    <p class="dispatch-sub">Cycle 1 · same-day · non-conveyor · trucks · volume · DSP routes · totes</p>
     """,
     unsafe_allow_html=True,
 )
@@ -132,6 +137,3 @@ r2c1, r2c2, r2c3 = st.columns(3)
 r2c1.metric("Total volume", f"{metrics['total_volume']:,}")
 r2c2.metric("Delivery routes by DSP", f"{metrics['routes_by_dsp']:,}")
 r2c3.metric("Totes", f"{metrics['totes']:,}")
-
-if df.empty:
-    st.caption("Upload a file with package columns to populate these counts.")
