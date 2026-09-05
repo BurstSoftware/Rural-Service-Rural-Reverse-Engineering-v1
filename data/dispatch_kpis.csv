@@ -1,0 +1,11 @@
+cycle,same_day,conveyor,induct_type,packages,truck_id,trucks,volume,volume_m3,cube,cuft,route_id,dsp,delivery_service_provider,tote_id,totes,tote_count,state,county,city,zip_code,road,address,lon,lat
+1,false,true,conveyor,42,TRK-01,1,18.4,0.52,18.4,18.4,R-101,Blue Ridge DSP,Blue Ridge DSP,T-1001,1,1,Kentucky,Wolfe,Campton,41301,KY-15,"100 KY-15, Campton, KY 41301",-83.5477,37.7348
+1,false,true,conveyor,36,TRK-01,1,15.1,0.43,15.1,15.1,R-101,Blue Ridge DSP,Blue Ridge DSP,T-1002,1,1,Kentucky,Wolfe,Campton,41301,Washington St,"12 Washington St, Campton, KY 41301",-83.5491,37.7356
+1,false,false,non_conveyor,12,TRK-02,1,6.8,0.19,6.8,6.8,R-102,Blue Ridge DSP,Blue Ridge DSP,T-1003,1,1,Kentucky,Wolfe,Campton,41301,KY-15,"220 KY-15, Campton, KY 41301",-83.5510,37.7312
+2,true,true,conveyor,28,TRK-03,1,11.2,0.32,11.2,11.2,R-201,Mountain Pack DSP,Mountain Pack DSP,T-2001,1,1,Kentucky,Breathitt,Jackson,41339,KY-15,"440 KY-15, Jackson, KY 41339",-83.3835,37.5531
+same-day,true,true,conveyor,19,TRK-03,1,7.5,0.21,7.5,7.5,R-201,Mountain Pack DSP,Mountain Pack DSP,T-2002,1,1,Kentucky,Breathitt,Jackson,41339,Broadway,"15 Broadway, Jackson, KY 41339",-83.3852,37.5540
+2,false,false,non_conveyor,9,TRK-04,1,4.1,0.12,4.1,4.1,R-202,Mountain Pack DSP,Mountain Pack DSP,T-2003,1,1,Kentucky,Breathitt,Jackson,41339,KY-30,"88 KY-30, Jackson, KY 41339",-83.3901,37.5488
+1,false,true,conveyor,31,TRK-05,1,13.0,0.37,13.0,13.0,R-103,Hilltop Logistics,Hilltop Logistics,T-1004,1,1,Kentucky,Lee,Beattyville,41311,KY-11,"50 KY-11, Beattyville, KY 41311",-83.7067,37.5718
+same-day,true,false,non_conveyor,7,TRK-05,1,2.9,0.08,2.9,2.9,R-203,Hilltop Logistics,Hilltop Logistics,T-2004,1,1,Kentucky,Lee,Beattyville,41311,Main St,"4 Main St, Beattyville, KY 41311",-83.7079,37.5710
+3,false,true,conveyor,22,TRK-06,1,9.6,0.27,9.6,9.6,R-301,Hilltop Logistics,Hilltop Logistics,T-3001,1,1,Kentucky,Owsley,Booneville,41314,KY-11,"17 KY-11, Booneville, KY 41314",-83.6748,37.4748
+1,false,false,non_conveyor,14,TRK-02,1,5.4,0.15,5.4,5.4,R-104,Blue Ridge DSP,Blue Ridge DSP,T-1005,1,1,Kentucky,Wolfe,Hazel Green,41332,KY-191,"9 KY-191, Hazel Green, KY 41332",-83.4186,37.7964
