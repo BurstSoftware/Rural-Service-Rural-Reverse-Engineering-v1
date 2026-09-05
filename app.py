@@ -2,36 +2,32 @@ from __future__ import annotations
 
 import streamlit as st
 
-st.set_page_config(
-    page_title="Rural RE / Services",
-    page_icon="🌾",
-    layout="wide",
-)
+from src.places import combined_frame
+
+st.set_page_config(page_title="Rural places", page_icon="🌾", layout="wide")
 
 if "assets" not in st.session_state:
     st.session_state.assets = []
-if "site_name" not in st.session_state:
-    st.session_state.site_name = "Unassigned"
 
-st.title("Rural reverse engineering & services")
-st.caption("Scan-to-model workspace for rural roads, settlements, and service assets")
+st.title("Rural places map")
+st.caption("CSV · JSON · GeoJSON  ·  filter by state, county, city, zip, road, address")
 
-st.session_state.site_name = st.sidebar.text_input("Site name", st.session_state.site_name)
-st.sidebar.selectbox("Focus", ["Road corridor", "Settlement", "Building", "Service point"])
-
+frame = combined_frame(st.session_state.assets)
 n = len(st.session_state.assets)
+mappable = int(frame[["lon", "lat"]].dropna().shape[0]) if not frame.empty else 0
+
 c1, c2, c3 = st.columns(3)
-c1.metric("Loaded files", n)
-c2.metric("Site", st.session_state.site_name)
-c3.metric("Next step", "Upload" if n == 0 else "Viewer / Measure")
+c1.metric("Files", n)
+c2.metric("Rows", len(frame))
+c3.metric("Mapped points", mappable)
 
 st.markdown(
     """
-Use the pages in order:
+1. **Upload** — `.csv`, `.json`, `.geojson`  
+2. **Map viewer** — place filters + map  
+3. **Place directory** — table for the current filters  
+4. **Place reports** — export a filtered summary
 
-1. **Upload** — CSV surveys, GeoJSON, later LAS/PLY  
-2. **Viewer** — map and 3D preview  
-3. **Measure** — lengths, bbox, simple chainage  
-4. **Reports** — export a field summary
+Expected columns (aliases accepted): `state`, `county`, `city`, `address`, `road`, `zip` / `zip_code`, `lon`, `lat`.
 """
 )
