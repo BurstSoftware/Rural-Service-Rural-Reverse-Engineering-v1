@@ -1,0 +1,222 @@
+{
+  "type": "FeatureCollection",
+  "name": "valle_verde_rural_re",
+  "crs": {
+    "type": "name",
+    "properties": { "name": "EPSG:4326" }
+  },
+  "properties": {
+    "site": "Valle Verde",
+    "project": "rural-re reverse engineering pilot",
+    "survey_date": "2026-08-21",
+    "crs": "EPSG:4326",
+    "vertical": "approx ellipsoidal / field GPS, not official orthometric"
+  },
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "R-SS18VAR-DEMO",
+        "name": "Valle Verde rural connector",
+        "asset_class": "road_centerline",
+        "surface": "worn asphalt",
+        "lane_width_m": 3.75,
+        "shoulder_m": 1.5,
+        "design_speed_kmh": 50,
+        "survey_date": "2026-08-21",
+        "condition": "fair",
+        "notes": "Reverse-engineered from GPS traverse + photo control. Missing as-built drawings."
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [15.3182, 40.2521, 186.2],
+          [15.31905, 40.2534, 188.1],
+          [15.3201, 40.2548, 191.4],
+          [15.3214, 40.256, 194.8],
+          [15.3229, 40.2571, 198.2],
+          [15.3246, 40.25795, 201.0],
+          [15.3264, 40.25855, 204.6],
+          [15.3282, 40.259, 208.3],
+          [15.3301, 40.25935, 212.1],
+          [15.332, 40.2598, 215.4]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "R-SS18VAR-SH-N",
+        "name": "North shoulder trace",
+        "asset_class": "road_shoulder",
+        "condition": "eroded",
+        "survey_date": "2026-08-21"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [15.31815, 40.25222, 186.4],
+          [15.319, 40.25352, 188.3],
+          [15.32005, 40.25492, 191.6],
+          [15.32135, 40.25612, 195.0],
+          [15.32285, 40.25722, 198.4],
+          [15.32455, 40.25807, 201.2],
+          [15.32635, 40.25867, 204.8],
+          [15.32815, 40.25912, 208.5],
+          [15.33005, 40.25947, 212.3],
+          [15.33195, 40.25992, 215.6]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "B-01-PT",
+        "name": "B-01 farmhouse centroid",
+        "asset_class": "building_point",
+        "use": "residential",
+        "condition": "fair",
+        "lon": 15.3208,
+        "lat": 40.2541,
+        "z": 192.0,
+        "survey_date": "2026-08-21"
+      },
+      "geometry": { "type": "Point", "coordinates": [15.3208, 40.2541, 192.0] }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "B-02-PT",
+        "name": "B-02 barn centroid",
+        "asset_class": "building_point",
+        "use": "agricultural",
+        "condition": "poor",
+        "lon": 15.32105,
+        "lat": 40.25385,
+        "z": 191.2,
+        "survey_date": "2026-08-21"
+      },
+      "geometry": { "type": "Point", "coordinates": [15.32105, 40.25385, 191.2] }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "B-03-PT",
+        "name": "B-03 chapel centroid",
+        "asset_class": "building_point",
+        "use": "religious",
+        "condition": "good",
+        "lon": 15.3251,
+        "lat": 40.2574,
+        "z": 203.1,
+        "survey_date": "2026-08-21"
+      },
+      "geometry": { "type": "Point", "coordinates": [15.3251, 40.2574, 203.1] }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "B-04-PT",
+        "name": "B-04 school room centroid",
+        "asset_class": "building_point",
+        "use": "civic",
+        "condition": "fair",
+        "lon": 15.3274,
+        "lat": 40.2577,
+        "z": 206.4,
+        "survey_date": "2026-08-21"
+      },
+      "geometry": { "type": "Point", "coordinates": [15.3274, 40.2577, 206.4] }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "B-05-PT",
+        "name": "B-05 clinic outpost centroid",
+        "asset_class": "building_point",
+        "use": "health",
+        "condition": "good",
+        "lon": 15.3292,
+        "lat": 40.2582,
+        "z": 209.8,
+        "survey_date": "2026-08-21"
+      },
+      "geometry": { "type": "Point", "coordinates": [15.3292, 40.2582, 209.8] }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "S-01",
+        "name": "S-01 spring / standpipe",
+        "asset_class": "rural_service",
+        "service_type": "water",
+        "status": "operating",
+        "lon": 15.3196,
+        "lat": 40.2531,
+        "z": 187.5,
+        "survey_date": "2026-08-21"
+      },
+      "geometry": { "type": "Point", "coordinates": [15.3196, 40.2531, 187.5] }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "S-02",
+        "name": "S-02 bus lay-by",
+        "asset_class": "rural_service",
+        "service_type": "transport",
+        "status": "operating",
+        "lon": 15.3234,
+        "lat": 40.2572,
+        "z": 199.0,
+        "survey_date": "2026-08-21"
+      },
+      "geometry": { "type": "Point", "coordinates": [15.3234, 40.2572, 199.0] }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "S-03",
+        "name": "S-03 grain collection pad",
+        "asset_class": "rural_service",
+        "service_type": "agriculture",
+        "status": "seasonal",
+        "lon": 15.326,
+        "lat": 40.2572,
+        "z": 203.8,
+        "survey_date": "2026-08-21"
+      },
+      "geometry": { "type": "Point", "coordinates": [15.326, 40.2572, 203.8] }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "S-04",
+        "name": "S-04 first-aid locker",
+        "asset_class": "rural_service",
+        "service_type": "health",
+        "status": "operating",
+        "lon": 15.3291,
+        "lat": 40.25805,
+        "z": 209.5,
+        "survey_date": "2026-08-21"
+      },
+      "geometry": { "type": "Point", "coordinates": [15.3291, 40.25805, 209.5] }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "S-05",
+        "name": "S-05 culvert C-12",
+        "asset_class": "rural_service",
+        "service_type": "drainage",
+        "status": "blocked",
+        "lon": 15.3222,
+        "lat": 40.25655,
+        "z": 196.1,
+        "survey_date": "2026-08-21"
+      },
+      "geometry": { "type": "Point", "coordinates": [15.3222, 40.25655, 196.1] }
+    }
+  ]
+}
